@@ -1,7 +1,9 @@
 '''Code for opening and analyzing a folder'''
 
-import os, fnmatch, zipfile 
+import os, fnmatch, zipfile, time, subprocess
 #import OS to work on directories, fnmatch to check for xml files, and zipfile to extract directories
+
+start=time.time()
 
 basepath='/home/ferret/CL5235_k1828612_Toms/' # Change directory to 'User' later
 logsdir='CL5235_Logs'
@@ -33,12 +35,13 @@ for directory in directories:
                 print('You have an XML file, please remove it.') # Tests for XML file extensions
             counter2+=1
             print('Converting {0}...'.format(item.name)) # Prints name of file and increments counter 
-            # Figure how to create multiple directories and save the files to respective directories
+            subprocess.call(['python','evtx_dump.py',item.name])
+            print('Conversion complete!')
     print() # Prints whitespace for readability
 
+elapsed=time.time()-start
 
-
-
+print('Program finished in {0:.2f} seconds'.format(elapsed))
 print('Traversed {0} folders'.format(counter1))
 print('Converted {0} files'.format(counter2))
         
