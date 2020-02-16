@@ -16,12 +16,12 @@ try:
 except FileExistsError:
     print('Folder exists!')
 
-
 # Extracts all directories and files into newly created (or existing) 
 with zipfile.ZipFile(basepath+'/evtx_logs.zip') as zipref:
     zipref.extractall(bsdst) # Extracts evtx_log.zip into logs directory to work with
 
 directories=os.scandir(bsdst+'/evtx_logs') # Directories to work with
+
 
 counter1=0 # Subdirectory counter
 counter2=0 # File counter
@@ -30,15 +30,17 @@ for directory in directories:
     counter1+=1 # Prints the name of the directory and increments counter
     with os.scandir(directory) as vessel:
         for item in vessel:
-            #if item.is_file():
+            filename=item.name[:len(item.name)-5] 
+            #This is the stupidest shit. Get JUST the filename by getting all the letters in the file name except the .evtx
             if fnmatch.fnmatch(item,'*.xml'):
-                print('You have an XML file, please remove it.') # Tests for XML file extensions
-                break
+                print('You have an XML file in this folder. please remove it')
+                break # Tests for XML file extensions
+                #os.system(command='cd {logs}/evtx_logs/{dir};rm *.xml'.format(logs=logsdir,dir=directory.name))
             counter2+=1
             print('Converting {0}...'.format(item.name)) # Prints name of file and increments counter 
-            #subprocess.call(['python3','evtx_dump.py',item.name])
-            # python3 ~/CL5235_k1828612_Toms/evtx_dump.py PanacheSysmon_vs_AtomicRedTeam01.evtx > pan.xml
-            #os.system(command='python3 {0} {1}evtx_logs/{2} > {2} '.format(script,bsdst,item.name))
+            os.system(command='cd {logs}/evtx_logs/{dir};python3 {script} {log} > {fn}.xml'.format(log=item.name,script=script,logs=logsdir,dir=directory.name,fn=filename))
+            # ^This is an absolutely ridiculous way of doing it but it almost works.
+            # Chains cd command to move to working dir and then executes script there 
             print('Conversion complete!')
     print() # Prints whitespace for readability
 
@@ -46,5 +48,5 @@ for directory in directories:
 print('Program finished in {0:.2f} seconds'.format(time.time()-start))
 print('Traversed {0} folders'.format(counter1))
 print('Converted {0} files'.format(counter2))
-        
+
 #os.rmdir(logsdir)
