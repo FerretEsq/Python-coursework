@@ -38,7 +38,7 @@ for directory in directories:
                 #os.system(command='cd {logs}/evtx_logs/{dir};rm *.xml'.format(logs=logsdir,dir=directory.name))
             counter2+=1
             print('Converting {0}...'.format(item.name)) # Prints name of file and increments counter 
-            os.system(command='cd {logs}/evtx_logs/{dir};python3 {script} {log} > {fn}.xml'.format(log=item.name,script=script,logs=logsdir,dir=directory.name,fn=filename))
+            os.system(command='cd {logs}/evtx_logs/{dir};sudo python3 {script} {log} > {fn}.xml'.format(log=item.name,script=script,logs=logsdir,dir=directory.name,fn=filename))
             # ^This is an absolutely ridiculous way of doing it but it almost works.
             # Chains cd command to move to working dir and then executes script there 
             print('Conversion complete!')
