@@ -41,6 +41,7 @@ for directory in directories:
             os.system(command='cd {logs}/evtx_logs/{dir};sudo python3 {script} {log} > {fn}.xml'.format(log=item.name,script=script,logs=logsdir,dir=directory.name,fn=filename))
             # ^This is an absolutely ridiculous way of doing it but it almost works.
             # Chains cd command to move to working dir and then executes script there 
+            # evtx_dump doesn't actually work on the file for some reason
             print('Conversion complete!')
     print() # Prints whitespace for readability
 
