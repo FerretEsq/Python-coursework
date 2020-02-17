@@ -45,6 +45,7 @@ for directory in directories:
             counter2+=1
             print('Converting {0}...'.format(item.name)) # Prints name of file and increments counter 
             os.system(command='cd {logs}/evtx_logs/{dir};sudo python3 {script} {log} > {fn}.xml'.format(log=item.name,script=script,logs=logsdir,dir=directory.name,fn=filename))
+            # Sudo only needed on home PC
             # ^This is an absolutely ridiculous way of doing it but it almost works.
             # Chains cd command to move to working dir and then executes script there 
             print('Conversion complete!')
