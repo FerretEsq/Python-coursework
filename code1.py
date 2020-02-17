@@ -1,9 +1,15 @@
 '''Code for opening and analyzing a folder'''
 
-import os, fnmatch, zipfile, time, subprocess
-#import OS to work on directories, fnmatch to check for xml files, and zipfile to extract directories
+import os, fnmatch, zipfile, time
+from datetime import datetime
+
 
 start=time.time()
+now=datetime.now()
+
+
+print('Program has started, the date is the {day} of {month}, {year}. the time is {time}'.format(day=now.strftime('%d'),month=now.strftime('%B'),year=now.strftime('%Y'),time=now.strftime('%X')))
+print()# Prints whitespace for readability
 
 basepath='/home/ferret/CL5235_k1828612_Toms/' # Change directory to 'User' later
 logsdir='CL5235_Logs/' # Logs directory
@@ -41,11 +47,11 @@ for directory in directories:
             os.system(command='cd {logs}/evtx_logs/{dir};sudo python3 {script} {log} > {fn}.xml'.format(log=item.name,script=script,logs=logsdir,dir=directory.name,fn=filename))
             # ^This is an absolutely ridiculous way of doing it but it almost works.
             # Chains cd command to move to working dir and then executes script there 
-            # evtx_dump doesn't actually work on the file for some reason
             print('Conversion complete!')
     print() # Prints whitespace for readability
 
-
+print('Finished converting all the files!')
+print('The time is {time}'.format(time=now.strftime('%X')))
 print('Program finished in {0:.2f} seconds'.format(time.time()-start))
 print('Traversed {0} folders'.format(counter1))
 print('Converted {0} files'.format(counter2))
