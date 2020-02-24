@@ -18,7 +18,7 @@ pAndl()# Prints whitespace for readability
 
 
 
-basepath='/home/user/CL5235_k1828612_Toms/' # Change directory to 'User' later
+basepath='/home/ferret/CL5235_k1828612_Toms/' # Change directory to 'User' later
 logsdir='CL5235_Logs/' # Logs directory
 bsdst=basepath+logsdir # Base destination to work with
 script=basepath+'evtx_dump.py' # Convert script
@@ -57,7 +57,7 @@ for directory in directories:
             counter2+=1
             pAndl('Converting {0}...'.format(item.name)) # Prints name of file and increments counter
             #log.write('Converting {0}...'.format(item.name))
-            os.system(command='cd {logs}/evtx_logs/{dir}; python3 {script} {log} > {fn}.xml'.format(log=item.name,script=script,logs=logsdir,dir=directory.name,fn=filename))
+            os.system(command='cd {logs}/evtx_logs/{dir};sudo python3 {script} {log} > {fn}.xml'.format(log=item.name,script=script,logs=logsdir,dir=directory.name,fn=filename))
             # ^This is an absolutely ridiculous way of doing it but it almost works.
             # Chains cd command to move to working dir and then executes script there 
             pAndl('Conversion complete!')
