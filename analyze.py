@@ -1,0 +1,35 @@
+import os, fnmatch, time
+from datetime import datetime
+def pAndl(arg=''):
+    print(arg)
+    log.write(arg+'\n')
+    # Simple function to print and write to a log
+
+log=open('Analyze_log_{ts}'.format(ts=now),'w+')
+
+start=time.time()
+now=datetime.now()
+
+pAndl('Program has started, the date is the {day} of {month}, {year}. the time is {time}'.format(day=now.strftime('%d'),month=now.strftime('%B'),year=now.strftime('%Y'),time=now.strftime('%X')))
+pAndl()# Prints whitespace for readability
+
+directories=os.scandir(bsdst+'evtx_logs') # Directories to work with
+
+counter1=0 # File counter
+counter2=0 # Total event IDs
+counter3=0 # Matched IDs
+
+eventsToMatch={1102:'',4611:'',4624:'',4634:'',4648:'',
+               4661:'',4662:'',4663:'',4663:'',4673:'',
+               4688:'',4698:'',4699:'',4702:'',4703:'',
+               4719:'',4732:'',4738:'',4742:'',4776:'',
+               4798:'',4799:'',4985:'',5136:'',5140:'',
+               5142:'',5145:'',5156:'',5158:''}
+
+for directory in directories:
+    with os.scandir(directory) as vessel:
+        for item in vessel:
+            if fnmatch.fnmatch(item,'*.xml'):
+                counter1+=1
+                pAndl('Found XML file {file}'.format(file=item.name))
+                pAndl('Parsing...')

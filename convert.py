@@ -3,16 +3,15 @@
 import os, fnmatch, zipfile, time
 from datetime import datetime
 
+def pAndl(arg=''):
+    print(arg)
+    log.write(arg+'\n')
+    # Simple function to print and write to a log
 
 start=time.time()
 now=datetime.now()
 
 log=open('Convert_log_{ts}'.format(ts=now),'w+')
-
-def pAndl(arg=''):
-    print(arg)
-    log.write(arg+'\n')
-    # Simple function to print and write to a log
 
 pAndl('Program has started, the date is the {day} of {month}, {year}. the time is {time}'.format(day=now.strftime('%d'),month=now.strftime('%B'),year=now.strftime('%Y'),time=now.strftime('%X')))
 pAndl()# Prints whitespace for readability
@@ -34,7 +33,7 @@ except FileExistsError:
     pAndl('Folder exists!')
 
 # Extracts all directories and files into newly created (or existing) 
-with zipfile.ZipFile(basepath+'/evtx_logs.zip') as zipref:
+with zipfile.ZipFile(basepath+'evtx_logs.zip') as zipref:
     zipref.extractall(bsdst) # Extracts evtx_log.zip into logs directory to work with
 
 directories=os.scandir(bsdst+'evtx_logs') # Directories to work with
