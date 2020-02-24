@@ -7,7 +7,7 @@ from datetime import datetime
 start=time.time()
 now=datetime.now()
 
-log=open('Cl5235_log_{ts}'.format(ts=now),'w+')
+log=open('Convert_log_{ts}'.format(ts=now),'w+')
 
 def pAndl(arg=''):
     print(arg)
