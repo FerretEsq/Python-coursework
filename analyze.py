@@ -11,6 +11,7 @@ start=time.time()
 now=datetime.now()
 
 log=open('Analyze_log_{ts}'.format(ts=now),'w+')
+os.system(command='mv "{log}" {logsdir}'.format(log=logname,logsdir=logsdir)) # Move log to logs directory
 
 basepath='/home/ferret/CL5235_k1828612_Toms/' # Change directory to 'User' later
 logsdir='CL5235_Logs/' # Logs directory
@@ -37,6 +38,6 @@ for directory in directories:
     with os.scandir(directory) as vessel:
         for item in vessel:
             if fnmatch.fnmatch(item,'*.xml'):
-                counter1+=1
-                pAndl('Found XML file {file}'.format(file=item.name))
-                pAndl('Parsing...')
+                with open(item) as fileToParse:
+                    for line in fileToParse:
+                        print(fileToParse.readline())
