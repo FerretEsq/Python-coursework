@@ -10,21 +10,17 @@ def pAndl(arg=''):
 
 start=time.time()
 now=datetime.now()
-
-log=open('Convert_log_{ts}'.format(ts=now),'w+')
+logname='Convert_log_{ts}'.format(ts=now)
+log=open(logname,'w+')
 
 pAndl('Program has started, the date is the {day} of {month}, {year}. the time is {time}'.format(day=now.strftime('%d'),month=now.strftime('%B'),year=now.strftime('%Y'),time=now.strftime('%X')))
 pAndl()# Prints whitespace for readability
 
 
-
 basepath='/home/ferret/CL5235_k1828612_Toms/' # Change directory to 'User' later
-logsdir='CL5235_Logs/' # Logs directory
+logsdir='CL5235_Logs' # Logs directory
 bsdst=basepath+logsdir # Base destination to work with
 script=basepath+'evtx_dump.py' # Convert script
-
-
-
 
 # Attempts to make logs directory if it doesnt exist. works fine for now
 try:
@@ -32,11 +28,13 @@ try:
 except FileExistsError:
     pAndl('Folder exists!')
 
+os.system(command='mv "{log}" {logsdir}'.format(log=logname,logsdir=logsdir)) # Move log to logs directory
+
 # Extracts all directories and files into newly created (or existing) 
-with zipfile.ZipFile(basepath+'evtx_logs.zip') as zipref:
+with zipfile.ZipFile(basepath+'/evtx_logs.zip') as zipref:
     zipref.extractall(bsdst) # Extracts evtx_log.zip into logs directory to work with
 
-directories=os.scandir(bsdst+'evtx_logs') # Directories to work with
+directories=os.scandir(bsdst+'/evtx_logs') # Directories to work with
 
 
 counter1=0 # Subdirectory counter
@@ -44,7 +42,6 @@ counter2=0 # File counter
 
 for directory in directories:
     pAndl('Working on {0} directory'.format(directory.name))
-    #log.write('Working on {0} directory'.format(directory.name))
     counter1+=1 # Prints the name of the directory and increments counter
     with os.scandir(directory) as vessel:
         for item in vessel:
@@ -53,18 +50,13 @@ for directory in directories:
             if fnmatch.fnmatch(item,'*.xml'):
                 pAndl('You have an XML file in this folder. please remove it')
                 break # Tests for XML file extensions
-                #os.system(command='cd {logs}/evtx_logs/{dir};rm *.xml'.format(logs=logsdir,dir=directory.name))
             counter2+=1
             pAndl('Converting {0}...'.format(item.name)) # Prints name of file and increments counter
-            #log.write('Converting {0}...'.format(item.name))
             os.system(command='cd {logs}/evtx_logs/{dir};sudo python3 {script} {log} > {fn}.xml'.format(log=item.name,script=script,logs=logsdir,dir=directory.name,fn=filename))
             # ^This is an absolutely ridiculous way of doing it but it almost works.
             # Chains cd command to move to working dir and then executes script there 
             pAndl('Conversion complete!')
-            #log.write('Conversion complete!')
     pAndl() # Prints whitespace for readability
-
-
 
 
 
