@@ -41,7 +41,7 @@ counter1=0 # Subdirectory counter
 counter2=0 # File counter
 
 for directory in directories:
-    pAndl('Working on {0} directory'.format(directory.name))
+    pAndl('Working on {0} directory'.format(directory.name.replace('_',' ')))
     counter1+=1 # Prints the name of the directory and increments counter
     with os.scandir(directory) as vessel:
         for item in vessel:
