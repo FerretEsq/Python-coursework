@@ -1,6 +1,5 @@
 import os, fnmatch, time, json
 from datetime import datetime
-from xml.dom.minidom import parse, parseString
 
 def pAndl(arg=''):
     print(arg)
@@ -33,11 +32,11 @@ eventsToMatch={1102:0,4611:0,4624:0,4634:0,4648:0,
                4688:0,4698:0,4699:0,4702:0,4703:0,
                4719:0,4732:0,4738:0,4742:0,4776:0,
                4798:0,4799:0,4985:0,5136:0,5140:0,
-               5142:0,5145:0,5156:0,5158:0}
+               5142:0,5145:0,5156:0,5158:0} # Dictionary of Event IDs, initialized with all 0 values
 
 
 for directory in directories:
-    pAndl('Working on "{0}" directory'.format(directory.name.replace('_',' ')))
+    pAndl('Working on "{0}" directory'.format(directory.name.replace('_',' '))) 
     with os.scandir(directory) as vessel: 
         for item in vessel:
             if fnmatch.fnmatch(item,'*.xml'):
@@ -53,9 +52,10 @@ for directory in directories:
                                         pAndl('Matched Event ID: {0}'.format(numEvent))
                                         counter3+=1
                                         eventsToMatch[event]+=1
+                                    #if Event is matched, increment value in dictionary
     pAndl()
 
-
+# Create JSON file to play around with in visualise.py
 jsonLogName='JSON_Analyze_{ts}.json'.format(ts=now)
 with open(jsonLogName,'w+') as jsonFile:
     json.dump(eventsToMatch,jsonFile)
