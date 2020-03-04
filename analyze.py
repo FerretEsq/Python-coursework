@@ -17,7 +17,6 @@ bsdst=basepath+logsdir # Base destination to work with
 
 os.system(command='mv "{log}" {logsdir}'.format(log=logname,logsdir=logsdir)) # Move log to logs directory
 
-
 pAndl('Program has started, the date is the {day} of {month}, {year}. the time is {time}'.format(day=now.strftime('%d'),month=now.strftime('%B'),year=now.strftime('%Y'),time=now.strftime('%X')))
 pAndl()# Prints whitespace for readability
 
@@ -33,10 +32,11 @@ eventsToMatch={1102:0,4611:0,4624:0,4634:0,4648:0,
                4719:0,4732:0,4738:0,4742:0,4776:0,
                4798:0,4799:0,4985:0,5136:0,5140:0,
                5142:0,5145:0,5156:0,5158:0} # Dictionary of Event IDs, initialized with all 0 values
-
+            
+eventsNotMatched={} # Dictionary of unmatched events 
 
 for directory in directories:
-    pAndl('Working on "{0}" directory'.format(directory.name.replace('_',' '))) 
+    pAndl('Working on "{0}" directory:'.format(directory.name.replace('_',' '))) 
     with os.scandir(directory) as vessel: 
         for item in vessel:
             if fnmatch.fnmatch(item,'*.xml'):
@@ -45,21 +45,43 @@ for directory in directories:
                         for line in fileToParse: # Iterates over the lines in the file
                             if line.startswith('<EventID'):
                                 numEvent=int(line[line.find('>')+1:line.find('</')])
-                                # Finds and converts event ID to int by finding beginning and end of ID value
+                                pAndl('An event ID:{0} found in file {1}'.format(numEvent,item.name))
                                 counter2+=1
-                                for event in eventsToMatch.keys():
-                                    if event==numEvent:
-                                        pAndl('Matched Event ID: {0}'.format(numEvent))
-                                        counter3+=1
-                                        eventsToMatch[event]+=1
-                                    #if Event is matched, increment value in dictionary
+                                if numEvent in eventsToMatch:
+                                    pAndl('Event ID {0} matched'.format(numEvent))
+                                    pAndl()
+                                    eventsToMatch[numEvent]+=1
+                                    counter3+=1
+                                    # If event is matched, print and increment dictionary key value
+                                elif numEvent not in eventsToMatch and numEvent not in eventsNotMatched:
+                                    eventsNotMatched[numEvent]=1
+                                    pAndl('Event {0} not matched'.format(numEvent))
+                                    pAndl()
+                                    # If event is not present in either dictionaries, create a new dict entry in eventsNotMatched dict
+                                else:
+                                    pAndl('Event {0} not matched'.format(numEvent))
+                                    pAndl()
+                                    eventsNotMatched[numEvent]+=1
+                                    # If event present in eventsNotMatched, print and increment eventNotMatched event key value
     pAndl()
 
-# Create JSON file to play around with in visualise.py
+# Create JSON file consisting of a list of dictionaries(index 0 being matched events, and index 1 being unmatched) to play around with in visualise.py
 jsonLogName='JSON_Analyze_{ts}.json'.format(ts=now)
 with open(jsonLogName,'w+') as jsonFile:
-    json.dump(eventsToMatch,jsonFile)
-os.system(command='mv "{log}" {logsdir}'.format(log=jsonLogName,logsdir=logsdir)) # Move log to logs directory
+    json.dump((eventsToMatch,eventsNotMatched),jsonFile)
+os.system(command='mv "{log}" {logsdir}'.format(log=jsonLogName,logsdir=logsdir)) # Move file to logs directory
+
+# Prints matched events
+pAndl('The events that were matched are:')
+for eventId in eventsToMatch.keys():
+    pAndl('Event {id}; Matched {num} times.'.format(id=eventId,num=eventsToMatch[eventId]))
+pAndl()
+
+#Prints unmached events
+pAndl('Events that were recorded but not matched are:')
+for eventId in eventsNotMatched.keys():
+    pAndl('Event {id}; recorded {num} times.'.format(id=eventId,num=eventsNotMatched[eventId]))
+pAndl()
 
 pAndl('Finished parsing all the files!')
 pAndl('The time is {time}'.format(time=now.strftime('%X')))
@@ -68,8 +90,8 @@ pAndl('Parsed {0} folders'.format(counter1))
 pAndl('{0} Event IDs found'.format(counter2))
 pAndl('{0} Event IDs matched'.format(counter3))
 pAndl()
-for eventId in eventsToMatch.keys():
-    pAndl('Event {id} had {num} matches'.format(id=eventId,num=eventsToMatch[eventId]))
-pAndl('Created JSON file under the name "{name}"'.format(name=jsonLogName))
+
+pAndl('Created JSON file under the name "{name}". Index 0 are matched events; Index 1 are unmatche events.'.format(name=jsonLogName))
+
 
 log.close()
