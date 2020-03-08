@@ -28,6 +28,7 @@ pAndl()# Prints whitespace for readability
 matcheDict=None
 otherDict=None
 
+# Passes JSON dictionaries into local objects
 with os.scandir(bsdst) as base:
     for item in base:
         if item.is_file():
@@ -37,31 +38,38 @@ with os.scandir(bsdst) as base:
                     matcheDict=data[0]
                     otherDict=data[1]
 
+# Create 4 lists to use for matplot
 matchedID=[item for item in matcheDict.keys()]
 matchedValue=[item for item in matcheDict.values()]
 occuredID=[item for item in otherDict.keys()]
 occuredValue=[item for item in otherDict.values()]
 
+# Feedback on all event IDs and their match frequency
 pAndl('Analyzing JSON file')
 for key,value in matcheDict.items():
-    pAndl('Event {0}: Occured {1} times'.format(key,value))
+    pAndl('Event {0}: Matched {1} times'.format(key,value))
 pAndl('')
 for key,value in otherDict.items():
     pAndl('Event {0}: Occured {1} times'.format(key,value))
 
+# Create visualization of matched IDs
 y_pos=np.arange(len(matchedID))
 plt.figure(num=None,figsize=(17,10))
-plt.bar(y_pos,matchedValue,align='center',alpha=0.5,)
+plt.bar(y_pos,matchedValue,align='center',alpha=0.5,width=0.5)
 plt.xticks(y_pos,matchedID)
+plt.xlabel('Event ID')
 plt.ylabel('Matches')
 plt.title('Matched IDs')
 plt.show()
 
+# Create Visualization of all other IDs
 y_pos=np.arange(len(occuredID))
 plt.figure(num=None,figsize=(50,10))
-plt.bar(y_pos,occuredValue,align='center',alpha=0.5,)
+plt.bar(y_pos,occuredValue,align='center',alpha=0.5,width=0.5)
 plt.xticks(y_pos,occuredID)
+plt.xlabel('Event ID')
 plt.ylabel('Occurences')
 plt.title('Other Occured IDs')
 plt.show()
+
 log.close()

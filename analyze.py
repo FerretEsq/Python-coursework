@@ -4,7 +4,7 @@ from datetime import datetime
 def pAndl(arg=''):
     print(arg)
     log.write(arg+'\n')
-    # Simple function to pAndl and write to a log
+    # Simple function to print and write to a log
 
 start=time.time()
 now=datetime.now()
@@ -43,8 +43,8 @@ for directory in directories:
                 counter1+=1
                 with open(item) as fileToParse:
                         for line in fileToParse: # Iterates over the lines in the file
-                            if line.startswith('<EventID'):
-                                numEvent=int(line[line.find('>')+1:line.find('</')])
+                            if line.startswith('<EventID'): # Find eventID by start of EventID line 
+                                numEvent=int(line[line.find('>')+1:line.find('</')]) # Grab just the ID num with find function
                                 pAndl('An event ID:{0} found in file {1}'.format(numEvent,item.name))
                                 counter2+=1
                                 if numEvent in eventsToMatch:
@@ -66,7 +66,7 @@ for directory in directories:
     pAndl()
 
 # Create JSON file consisting of a list of dictionaries(index 0 being matched events, and index 1 being unmatched) to play around with in visualise.py
-jsonLogName='JSON_Analyze_{ts}.json'.format(ts=now)
+jsonLogName='JSON_Analyze_{ts}'.format(ts=now)
 with open(jsonLogName,'w+') as jsonFile:
     json.dump((eventsToMatch,eventsNotMatched),jsonFile)
 os.system(command='mv "{log}" {logsdir}'.format(log=jsonLogName,logsdir=logsdir)) # Move file to logs directory
@@ -74,7 +74,7 @@ os.system(command='mv "{log}" {logsdir}'.format(log=jsonLogName,logsdir=logsdir)
 # Prints matched events
 pAndl('The events that were matched are:')
 for eventId in eventsToMatch.keys():
-    pAndl('Event {id}; Matched {num} times.'.format(id=eventId,num=eventsToMatch[eventId]))
+    pAndl('Event {id}; matched {num} times.'.format(id=eventId,num=eventsToMatch[eventId]))
 pAndl()
 
 #Prints unmached events
@@ -91,7 +91,7 @@ pAndl('{0} Event IDs found'.format(counter2))
 pAndl('{0} Event IDs matched'.format(counter3))
 pAndl()
 
-pAndl('Created JSON file under the name "{name}". Index 0 are matched events; Index 1 are unmatche events.'.format(name=jsonLogName))
+pAndl('Created JSON file under the name "{name}". Index 0 is the matched events dictionary; Index 1 is the unmatched events dictionary.'.format(name=jsonLogName))
 
 
 log.close()
