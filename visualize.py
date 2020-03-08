@@ -1,7 +1,7 @@
 import os, fnmatch, time, json
 from datetime import datetime
-from matplotlib import pyplot as pls 
-
+from matplotlib import pyplot as plt
+import numpy as np
 
 def pAndl(arg=''):
     print(arg)
@@ -12,7 +12,9 @@ def pAndl(arg=''):
 start=time.time()
 now=datetime.now()
 logname='Visdata_log_{ts}'.format(ts=now)
-#log=open(logname,'w+')
+log=open(logname,'w+')
+
+
 
 basepath='/home/ferret/CL5235_k1828612_Toms/' # Change directory to 'User' later
 logsdir='CL5235_Logs/' # Logs directory
@@ -20,11 +22,11 @@ bsdst=basepath+logsdir # Base destination to work with
 
 os.system(command='mv "{log}" {logsdir}'.format(log=logname,logsdir=logsdir)) # Move log to logs directory
 
-print('Program has started, the date is the {day} of {month}, {year}. the time is {time}'.format(day=now.strftime('%d'),month=now.strftime('%B'),year=now.strftime('%Y'),time=now.strftime('%X')))
-print()# Prints whitespace for readability
+pAndl('Program has started, the date is the {day} of {month}, {year}. the time is {time}'.format(day=now.strftime('%d'),month=now.strftime('%B'),year=now.strftime('%Y'),time=now.strftime('%X')))
+pAndl()# Prints whitespace for readability
 
-list1=None
-list2=None
+matcheDict=None
+otherDict=None
 
 with os.scandir(bsdst) as base:
     for item in base:
@@ -32,13 +34,34 @@ with os.scandir(bsdst) as base:
             if fnmatch.fnmatch(item.name,'JSON_Analyze_*'):
                 with open(item) as jsonFile:
                     data=json.load(jsonFile)
-                    list1=data[0]
-                    list2=data[1]
+                    matcheDict=data[0]
+                    otherDict=data[1]
 
+matchedID=[item for item in matcheDict.keys()]
+matchedValue=[item for item in matcheDict.values()]
+occuredID=[item for item in otherDict.keys()]
+occuredValue=[item for item in otherDict.values()]
 
-for key,value in list1.items():
-    print('Event {0}: Occured {1} times'.format(key,value))
-print('')
-for key,value in list2.items():
-    print('Event {0}: Occured {1} times'.format(key,value))
+pAndl('Analyzing JSON file')
+for key,value in matcheDict.items():
+    pAndl('Event {0}: Occured {1} times'.format(key,value))
+pAndl('')
+for key,value in otherDict.items():
+    pAndl('Event {0}: Occured {1} times'.format(key,value))
 
+y_pos=np.arange(len(matchedID))
+plt.figure(num=None,figsize=(17,10))
+plt.bar(y_pos,matchedValue,align='center',alpha=0.5,)
+plt.xticks(y_pos,matchedID)
+plt.ylabel('Matches')
+plt.title('Matched IDs')
+plt.show()
+
+y_pos=np.arange(len(occuredID))
+plt.figure(num=None,figsize=(50,10))
+plt.bar(y_pos,occuredValue,align='center',alpha=0.5,)
+plt.xticks(y_pos,occuredID)
+plt.ylabel('Occurences')
+plt.title('Other Occured IDs')
+plt.show()
+log.close()
