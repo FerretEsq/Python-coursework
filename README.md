@@ -1,4 +1,4 @@
-This repository is home to my 2nd teaching block of the 2nd year project for my Cyber Security & Digital Forensics module.
+This repository is home to my 2nd year, 2nd TB project for my Cyber Security & Digital Forensics module.
 
 
 Convert.py takes a load of EVTX files and converts them into XML files for parsing
