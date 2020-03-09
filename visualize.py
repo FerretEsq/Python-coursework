@@ -2,6 +2,7 @@ import os, fnmatch, time, json
 from datetime import datetime
 from matplotlib import pyplot as plt
 import numpy as np
+import pandas as pd
 
 def pAndl(arg=''):
     print(arg)
@@ -55,8 +56,8 @@ for key,value in otherDict.items():
 # Create visualization of matched IDs
 y_pos=np.arange(len(matchedID))
 plt.figure(num=None,figsize=(17,10))
-plt.bar(y_pos,matchedValue,align='center',alpha=0.5,width=0.5)
-plt.xticks(y_pos,matchedID)
+plt.barh(y_pos,matchedValue,height=0.5,alpha=0.5)
+plt.yticks(y_pos,matchedID)
 plt.xlabel('Event ID')
 plt.ylabel('Matches')
 plt.title('Matched IDs')
@@ -64,11 +65,11 @@ plt.show()
 
 # Create Visualization of all other IDs
 y_pos=np.arange(len(occuredID))
-plt.figure(num=None,figsize=(50,10))
-plt.bar(y_pos,occuredValue,align='center',alpha=0.5,width=0.5)
-plt.xticks(y_pos,occuredID)
-plt.xlabel('Event ID')
-plt.ylabel('Occurences')
+plt.figure(num=None,figsize=(37,15))
+plt.barh(y_pos,occuredValue,alpha=0.5)
+plt.yticks(y_pos,occuredID)
+plt.xlabel('Occurences')
+plt.ylabel('Event IDs')
 plt.title('Other Occured IDs')
 plt.show()
 
