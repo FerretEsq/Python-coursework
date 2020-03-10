@@ -45,14 +45,14 @@ for directory in directories:
     counter1+=1 # Prints the name of the directory and increments counter
     with os.scandir(directory) as vessel:
         for item in vessel:
-            filename=item.name[:len(item.name)-5].replace(' ','_') 
+            filename=item.name[:len(item.name)-5]
             #This is the stupidest shit. Get JUST the filename by getting all the letters in the file name except the .evtx
             if fnmatch.fnmatch(item,'*.xml'):
                 pAndl('You have an XML file in this folder. please remove it')
                 break # Tests for XML file extensions
             counter2+=1
             pAndl('Converting {0}...'.format(item.name)) # Prints name of file and increments counter
-            os.system(command='cd {logs}/evtx_logs/{dir};sudo python3 {script} \'{log}\' > {fn}.xml'.format(log=item.name.replace(' ','_'),script=script,logs=logsdir,dir=directory.name,fn=filename))
+            os.system(command='cd {logs}/evtx_logs/{dir};sudo python3 {script} \'{log}\' > {fn}.xml'.format(log=item.name,script=script,logs=logsdir,dir=directory.name,fn=filename))
             # ^This is an absolutely ridiculous way of doing it but it almost works.
             # Chains cd command to move to working dir and then executes script there 
             pAndl('Conversion complete!')
