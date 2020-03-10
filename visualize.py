@@ -2,7 +2,6 @@ import os, fnmatch, time, json
 from datetime import datetime
 from matplotlib import pyplot as plt
 import numpy as np
-import pandas as pd
 
 def pAndl(arg=''):
     print(arg)
@@ -26,6 +25,7 @@ os.system(command='mv "{log}" {logsdir}'.format(log=logname,logsdir=logsdir)) # 
 pAndl('Program has started, the date is the {day} of {month}, {year}. the time is {time}'.format(day=now.strftime('%d'),month=now.strftime('%B'),year=now.strftime('%Y'),time=now.strftime('%X')))
 pAndl()# Prints whitespace for readability
 
+# Two empty variables to become dictionaries out of JSON file
 matcheDict=None
 otherDict=None
 
@@ -63,9 +63,9 @@ plt.yticks(y_pos,occuredID,rotation=20)
 plt.xlabel('Event ID')
 plt.ylabel('Matches')
 plt.title('Matched IDs')
+plt.show()
 plt.savefig('MatchedIDs.png')
 
-plt.show()
 
 # Create Visualization of all other IDs
 y_pos=np.arange(len(occuredID))
