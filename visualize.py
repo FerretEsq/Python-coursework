@@ -8,13 +8,10 @@ def pAndl(arg=''):
     log.write(arg+'\n')
     # Simple function to print and write to a log
 
-
 start=time.time()
 now=datetime.now()
 logname='Visdata_log_{ts}'.format(ts=now)
 log=open(logname,'w+')
-
-
 
 basepath='/home/ferret/CL5235_k1828612_Toms/' # Change directory to 'User' later
 logsdir='CL5235_Logs/' # Logs directory
@@ -29,7 +26,7 @@ pAndl()# Prints whitespace for readability
 matcheDict=None
 otherDict=None
 
-# Passes JSON dictionaries into local objects
+# Passes JSON dictionaries into global objects
 with os.scandir(bsdst) as base:
     for item in base:
         if item.is_file():
@@ -53,8 +50,6 @@ pAndl('')
 for key,value in otherDict.items():
     pAndl('Event {0}: Occured {1} times'.format(key,value))
 
-
-x_list=[i for i in range(0,1500,100)]
 # Create visualization of matched IDs
 y_pos=np.arange(len(matchedID))
 plt.figure(figsize=(17,10))
@@ -66,18 +61,17 @@ plt.title('Matched IDs')
 plt.show()
 plt.savefig('MatchedIDs.png')
 
-
 # Create Visualization of all other IDs
 y_pos=np.arange(len(occuredID))
 plt.figure(figsize=(37,15))
 plt.barh(y_pos,occuredValue,height=0.5,alpha=0.5)
-plt.yticks(y_pos,occuredID,rotation=20)
+plt.yticks(y_pos,occuredID,rotation=10)
 plt.xlabel('Occurences')
 plt.ylabel('Event IDs')
 plt.title('Other Occured IDs')
 plt.show()
 plt.savefig('OtherIDs.png')
 
-os.system(command='mv "OtherIDs.png" {0}; mv "MatchedIDs.png" {0}'.format(logsdir))
+os.system(command='mv "OtherIDs.png" {0}; mv "MatchedIDs.png" {0}'.format(logsdir)) # Moves saved images to logs directory
 
 log.close()

@@ -33,7 +33,7 @@ eventsToMatch={1102:0,4611:0,4624:0,4634:0,4648:0,
                4798:0,4799:0,4985:0,5136:0,5140:0,
                5142:0,5145:0,5156:0,5158:0} # Dictionary of Event IDs, initialized with all 0 values
             
-eventsNotMatched={} # Dictionary of unmatched events 
+eventsNotMatched={} # Dictionary of unmatched events, empty initially but to be filled as file works
 
 for directory in directories:
     pAndl('Working on "{0}" directory:'.format(directory.name.replace('_',' '))) 
@@ -92,6 +92,5 @@ pAndl('{0} Event IDs matched'.format(counter3))
 pAndl()
 
 pAndl('Created JSON file under the name "{name}". Index 0 is the matched events dictionary; Index 1 is the unmatched events dictionary.'.format(name=jsonLogName))
-
 
 log.close()
